@@ -1,1 +1,22 @@
-[]
+[
+  {
+    "name": "A normal, complete problem statement",
+    "input": "Build a food rescue matching platform connecting supermarkets and restaurants with surplus fresh food to nearby community pantries and shelters before expiration.",
+    "expected_output": "System successfully accepts the complete problem statement, extracts key user personas and constraints, and produces a structured MVP plan, actionable task list, and validation checkpoints for a 90-minute hackathon."
+  },
+  {
+    "name": "A problem from a different domain",
+    "input": "Develop an automated remote triage and queue prioritization system for rural healthcare clinics treating high-risk maternal patients based on wearable vitals.",
+    "expected_output": "System adapts flexibly to the healthcare domain context without hardcoded assumptions, accurately identifying medical staff personas, triage workflows, and clinical safety constraints to outline a tailored MVP solution."
+  },
+  {
+    "name": "An empty or missing problem statement",
+    "input": "",
+    "expected_output": "System validates input integrity, rejects the empty or missing problem statement with a descriptive error message, and prevents downstream execution until valid input is provided."
+  },
+  {
+    "name": "A vague or overly broad problem statement",
+    "input": "Make an AI platform that uses blockchain and quantum computing to fix global climate change.",
+    "expected_output": "System detects excessive ambiguity and unmanageable scope, prompts the user with clarifying constraints, and recommends narrowing the focus to a measurable 90-minute hackathon deliverable."
+  }
+]
