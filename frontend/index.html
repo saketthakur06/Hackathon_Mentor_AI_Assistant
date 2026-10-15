@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hackathon AI Mentor | Fast-Track Your Hackathon Project</title>
+  <meta name="description" content="AI-powered mentor for hackathon teams. Transform problem statements into MVP scope, tech stacks, sprint tasks, test cases, and jury pitches in seconds.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header / Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+        </div>
+        <div class="brand-info">
+          <span class="brand-title">Hackathon AI Mentor</span>
+          <span class="brand-tag">Student Edition</span>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <div class="backend-badge" id="backendBadge" title="Backend connection status">
+          <span class="status-dot" id="statusDot"></span>
+          <span class="status-label" id="statusLabel">Ready</span>
+        </div>
+
+        <div class="mock-toggle-wrapper" title="Toggle simulation mode when backend is offline">
+          <label class="mock-toggle" for="mockModeToggle">
+            <input type="checkbox" id="mockModeToggle" aria-describedby="mockModeDesc">
+            <span class="toggle-slider"></span>
+            <span class="toggle-text">Dev Mock Mode</span>
+          </label>
+          <span id="mockModeDesc" class="sr-only">Enable local mock responses when backend server is unavailable</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-content">
+    <div class="container">
+      
+      <!-- Hero Intro Section -->
+      <section class="hero-section" id="heroSection">
+        <div class="hero-pill">
+          <span class="pulse-indicator"></span>
+          <span>Fast-Track Your Sprint Strategy</span>
+        </div>
+        <h1 class="hero-title">Hackathon AI Mentor</h1>
+        <p class="hero-description">
+          Turn your raw problem statement into an actionable execution roadmap, tech stack, modular team tasks, validation milestones, and a winning jury pitch outline in seconds.
+        </p>
+
+        <div class="hero-badges">
+          <div class="badge-item">
+            <span class="badge-icon">⏱️</span>
+            <span>Sprint Time Optimization</span>
+          </div>
+          <div class="badge-item">
+            <span class="badge-icon">🎯</span>
+            <span>Laser-Focused MVP Scope</span>
+          </div>
+          <div class="badge-item">
+            <span class="badge-icon">🏆</span>
+            <span>Jury-Ready Pitch Structure</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Alert Box for Validation & Errors -->
+      <div id="alertBox" class="alert-box hidden" role="alert" aria-live="polite">
+        <div class="alert-icon" id="alertIcon">⚠️</div>
+        <div class="alert-body">
+          <h2 class="alert-title" id="alertTitle">Attention Required</h2>
+          <p class="alert-message" id="alertMessage"></p>
+          <div class="alert-actions" id="alertActions"></div>
+        </div>
+        <button type="button" class="alert-close" id="alertCloseBtn" aria-label="Dismiss alert">&times;</button>
+      </div>
+
+      <!-- Problem Input Form Card -->
+      <section class="card form-card" id="formCard">
+        <div class="card-header">
+          <div class="card-title-group">
+            <h2 class="card-title">Define Your Hackathon Challenge</h2>
+            <p class="card-subtitle">Provide your team's constraints to receive a tailored sprint plan.</p>
+          </div>
+          <div class="example-selector">
+            <span class="example-label">Try quick example:</span>
+            <div class="example-chips">
+              <button type="button" class="chip-btn" data-problem="Reduce food waste in college canteens by tracking leftover meals and alerting students for discounted pickups.">🥗 Food Waste</button>
+              <button type="button" class="chip-btn" data-problem="Smart disaster response coordination connecting affected citizens with volunteer rescuers and medical aid in real-time.">🚨 Disaster Rescue</button>
+              <button type="button" class="chip-btn" data-problem="Campus peer mental health support platform with anonymous safe spaces and guided wellness check-ins.">🧠 Peer Support</button>
+              <button type="button" class="chip-btn" data-problem="Decentralized peer-to-peer renewable energy trading between rooftop solar owners in residential communities.">⚡ Green Energy</button>
+            </div>
+          </div>
+        </div>
+
+        <form id="mentorForm" novalidate>
+          <!-- Problem Statement Input -->
+          <div class="form-group">
+            <div class="label-row">
+              <label for="problemStatement" class="form-label">
+                Problem Statement <span class="required-star">*</span>
+              </label>
+              <span class="char-count" id="charCount">0 characters</span>
+            </div>
+            <textarea 
+              id="problemStatement" 
+              name="problem_statement" 
+              class="form-control textarea" 
+              rows="4" 
+              placeholder="e.g. Reduce food waste in college canteens by predicting excess meals, notifying campus residents for discounted reservations, and distributing surplus food to local shelters..."
+              required
+              minlength="10"
+              aria-describedby="problemHelp"
+            ></textarea>
+            <span id="problemHelp" class="form-hint">Describe the core pain point, target beneficiary, and desired outcome (minimum 10 characters).</span>
+            <div class="field-error" id="problemError"></div>
+          </div>
+
+          <!-- Parameters Row (Team Size & Time Limit) -->
+          <div class="form-row">
+            <!-- Team Size -->
+            <div class="form-group col-half">
+              <label for="teamSize" class="form-label">
+                Team Size <span class="required-star">*</span>
+              </label>
+              <div class="input-stepper-wrapper">
+                <input 
+                  type="number" 
+                  id="teamSize" 
+                  name="team_size" 
+                  class="form-control input-number" 
+                  value="5" 
+                  min="1" 
+                  max="20" 
+                  required
+                >
+                <span class="input-unit">members</span>
+              </div>
+              <span class="form-hint">Default: 5 members. Tailors task breakdown to your roster.</span>
+              <div class="field-error" id="teamSizeError"></div>
+            </div>
+
+            <!-- Time Limit -->
+            <div class="form-group col-half">
+              <div class="label-row">
+                <label for="timeLimit" class="form-label">
+                  Available Development Time <span class="required-star">*</span>
+                </label>
+                <div class="quick-time-presets">
+                  <button type="button" class="preset-btn" data-time="60">60m</button>
+                  <button type="button" class="preset-btn active" data-time="90">90m</button>
+                  <button type="button" class="preset-btn" data-time="180">3h</button>
+                  <button type="button" class="preset-btn" data-time="1440">24h</button>
+                </div>
+              </div>
+              <div class="input-stepper-wrapper">
+                <input 
+                  type="number" 
+                  id="timeLimit" 
+                  name="time_limit_minutes" 
+                  class="form-control input-number" 
+                  value="90" 
+                  min="15" 
+                  max="2880" 
+                  required
+                >
+                <span class="input-unit">minutes</span>
+              </div>
+              <span class="form-hint">Default: 90 minutes. Scopes MVP complexity strictly to deadline.</span>
+              <div class="field-error" id="timeLimitError"></div>
+            </div>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="form-actions">
+            <button type="submit" id="submitBtn" class="btn btn-primary">
+              <span class="btn-icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+                </svg>
+              </span>
+              <span class="btn-text">Generate Mentor Plan</span>
+            </button>
+            <button type="button" id="resetBtn" class="btn btn-secondary">
+              Clear
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Loading State Card -->
+      <section id="loadingCard" class="card loading-card hidden" aria-live="polite">
+        <div class="loading-animation">
+          <div class="spinner-core"></div>
+          <div class="spinner-ring ring-1"></div>
+          <div class="spinner-ring ring-2"></div>
+        </div>
+        <h2 class="loading-title">AI Mentor is architecting your sprint...</h2>
+        <p class="loading-step" id="loadingStepText">Analyzing problem statement & scoping MVP...</p>
+        <div class="loading-progress-bar">
+          <div class="loading-progress-fill" id="loadingProgressFill"></div>
+        </div>
+        <div class="loading-subtext">Synthesizing tech stack, team delegation, test cases, and jury presentation.</div>
+      </section>
+
+      <!-- Results Dashboard -->
+      <section id="resultsDashboard" class="results-dashboard hidden">
+        <!-- Results Top Summary Bar -->
+        <div class="results-summary-card">
+          <div class="summary-left">
+            <div class="summary-tag">
+              <span class="status-dot green"></span>
+              <span>Mentor Plan Generated</span>
+            </div>
+            <h2 class="summary-title" id="summaryProblemTitle">Problem Statement</h2>
+            <div class="summary-metadata">
+              <span class="meta-pill" id="metaTeamSize">👥 Team: 5 members</span>
+              <span class="meta-pill" id="metaTimeLimit">⏱️ Time Limit: 90 minutes</span>
+              <span class="meta-pill mock-pill hidden" id="metaMockPill">🧪 Dev Mock Data</span>
+            </div>
+          </div>
+          <div class="summary-actions">
+            <button type="button" id="editProblemBtn" class="btn btn-outline" title="Modify parameters or submit a different problem">
+              <span aria-hidden="true">✏️</span>
+              <span>Edit / New Problem</span>
+            </button>
+            <button type="button" id="copyPlanBtn" class="btn btn-outline" title="Copy full plan to clipboard">
+              <span aria-hidden="true">📋</span>
+              <span id="copyBtnText">Copy Plan</span>
+            </button>
+            <button type="button" id="printPlanBtn" class="btn btn-outline" title="Print or save as PDF">
+              <span aria-hidden="true">🖨️</span>
+              <span>Print Plan</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Section Navigation Tabs -->
+        <nav class="dashboard-nav" aria-label="Dashboard Sections">
+          <button type="button" class="dash-tab active" data-tab="all">All Sections (11)</button>
+          <button type="button" class="dash-tab" data-tab="problem">🎯 Problem & Users</button>
+          <button type="button" class="dash-tab" data-tab="solution">🚀 Solution & Stack</button>
+          <button type="button" class="dash-tab" data-tab="sprint">📋 Tasks & Milestones</button>
+          <button type="button" class="dash-tab" data-tab="pitch">🏆 Test & Jury Pitch</button>
+        </nav>
+
+        <!-- DASHBOARD GRID: 11 SECTIONS -->
+        <div class="dashboard-sections-container">
+
+          <!-- ================= GROUP 1: PROBLEM & USERS ================= -->
+          <div class="section-group" data-group="problem">
+            <!-- 1. Problem Summary -->
+            <article class="dash-card full-width" id="sectionProblemSummary">
+              <div class="dash-card-header">
+                <div class="section-badge">1 / 11</div>
+                <h3 class="dash-card-title">
+                  <span class="card-icon" aria-hidden="true">📝</span>
+                  Problem Summary
+                </h3>
+              </div>
+              <div class="dash-card-body">
+                <blockquote class="summary-quote" id="problemSummaryContent">
+                  <!-- Populated dynamically via textContent -->
+                </blockquote>
+              </div>
+            </article>
+
+            <!-- 2. Target Users -->
+            <article class="dash-card half-width" id="sectionTargetUsers">
+              <div class="dash-card-header">
+                <div class="section-badge">2 / 11</div>
+                <h3 class="dash-card-title">
+                  <span class="card-icon" aria-hidden="true">👥</span>
+                  Target Users
+                </h3>
+              </div>
+              <div class="dash-card-body">
+                <ul class="users-list" id="targetUsersList">
+                  <!-- Populated dynamically -->
+                </ul>
+              </div>
+            </article>
+
+            <!-- 3. User Needs -->
+            <article class="dash-card half-width" id="sectionUserNeeds">
+              <div class="dash-card-header">
+                <div class="section-badge">3 / 11</div>
+                <h3 class="dash-card-title">
+                  <span class="card-icon" aria-hidden="true">💡</span>
+                  User Needs
+                </h3>
+              </div>
+              <div class="dash-card-body">
+                <ul class="needs-list" id="userNeedsList">
+                  <!-- Populated dynamically -->
+                </ul>
+              </div>
+            </article>
+          </div>
+
+          <!-- ================= GROUP 2: SOLUTION & TECH STACK ================= -->
+          <div class="section-group" data-group="solution">
+            <!-- 4. Suggested Features -->
+            <article class="dash-card full-width" id="sectionSuggestedFeatures">
+              <div class="dash-card-header">
+                <div class="section-badge">4 / 11</div>
+                <h3 class="dash-card-title">
+                  <span class="card-icon" aria-hidden="true">✨</span>
+                  Suggested Features
+                </h3>
+              </div>
+              <div class="dash-card-body">
+                <div class="features-grid" id="suggestedFeaturesGrid">
+                  <!-- Populated dynamically -->
+                </div>
+              </div>
+            </article>
+
+            <!-- 5. MVP Plan -->
+            <article class="dash-card half-width" id="sectionMvpPlan">
+              <div class="dash-card-header">
+                <div class="section-badge">5 / 11</div>
+                <h3 class="dash-card-title">
+                  <span class="card-icon" aria-hidden="true">🎯</span>
+                  MVP Plan
+                </h3>
+              </div>
+              <div class="dash-card-body">
+                <div class="mvp-timeline" id="mvpPlanList">
+                  <!-- Populated dynamically -->
+                </div>
+              </div>
+            </article>
+
+            <!-- 6. Recommended Tech Stack -->
+            <article class="dash-card half-width" id="sectionTechStack">
+              <div class="dash-card-header">
+                <div class="section-badge">6 / 11</div>
+                <h3 class="dash-card-title">
+                  <span class="card-icon" aria-hidden="true">⚡</span>
+                  Recommended Tech Stack
+                </h3>
+              </div>
+              <div class="dash-card-body">
+                <div class="tech-stack-container" id="techStackContainer">
+                  <!-- Populated dynamically -->
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- ================= GROUP 3: SPRINT TASKS & CHECKPOINTS ================= -->
+          <div class="section-group" data-group="sprint">
+            <!-- 7. Development Tasks -->
+            <article class="dash-card full-width" id="sectionDevTasks">
+              <div class="dash-card-header">
+                <div class="header-left">
+                  <div class="section-badge">7 / 11</div>
+                  <h3 class="dash-card-title">
+                    <span class="card-icon" aria-hidden="true">🔨</span>
+                    Development Tasks
+                  </h3>
+                </div>
+                <div class="task-stats-badge" id="taskStatsBadge">
+                  <span id="taskProgressCount">0 / 0 completed</span>
+                </div>
+              </div>
+              <div class="dash-card-body">
+                <p class="section-helper-text">Actionable sprint backlog partitioned across your team members. Tick off tasks as you complete them.</p>
+                <div class="tasks-container" id="devTasksContainer">
+                  <!-- Populated dynamically -->
+                </div>
+              </div>
+            </article>
+
+            <!-- 8. Validation Checkpoints -->
+            <article class="dash-card full-width" id="sectionValidationCheckpoints">
+              <div class="dash-card-header">
+                <div class="section-badge">8 / 11</div>
+                <h3 class="dash-card-title">
+                  <span class="card-icon" aria-hidden="true">🚩</span>
+                  Validation Checkpoints
+                </h3>
+              </div>
+              <div class="dash-card-body">
+                <p class="section-helper-text">Crucial time-gates to ensure you stay on schedule before the final judging buzzer.</p>
+                <div class="checkpoints-timeline" id="validationCheckpointsContainer">
+                  <!-- Populated dynamically -->
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- ================= GROUP 4: TEST & JURY PITCH ================= -->
+          <div class="section-group" data-group="pitch">
+            <!-- 9. Test Cases -->
+            <article class="dash-card full-width" id="sectionTestCases">
+              <div class="dash-card-header">
+                <div class="section-badge">9 / 11</div>
+                <h3 class="dash-card-title">
+                  <span class="card-icon" aria-hidden="true">🧪</span>
+                  Test Cases
+                </h3>
+              </div>
+              <div class="dash-card-body">
+                <p class="section-helper-text">Essential scenarios to verify before demonstrating your project to judges.</p>
+                <div class="test-cases-grid" id="testCasesContainer">
+                  <!-- Populated dynamically -->
+                </div>
+              </div>
+            </article>
+
+            <!-- 10. Demo Checklist -->
+            <article class="dash-card half-width" id="sectionDemoChecklist">
+              <div class="dash-card-header">
+                <div class="section-badge">10 / 11</div>
+                <h3 class="dash-card-title">
+                  <span class="card-icon" aria-hidden="true">📋</span>
+                  Demo Checklist
+                </h3>
+              </div>
+              <div class="dash-card-body">
+                <p class="section-helper-text">Pre-flight checklist to avoid live demo failures during judgment.</p>
+                <ul class="checklist-items" id="demoChecklistContainer">
+                  <!-- Populated dynamically -->
+                </ul>
+              </div>
+            </article>
+
+            <!-- 11. Jury Presentation Outline -->
+            <article class="dash-card half-width" id="sectionJuryPresentation">
+              <div class="dash-card-header">
+                <div class="section-badge">11 / 11</div>
+                <h3 class="dash-card-title">
+                  <span class="card-icon" aria-hidden="true">🎤</span>
+                  Jury Presentation Outline
+                </h3>
+              </div>
+              <div class="dash-card-body">
+                <p class="section-helper-text">Step-by-step pitch deck outline tailored for high-impact scoring.</p>
+                <div class="presentation-outline" id="juryPresentationContainer">
+                  <!-- Populated dynamically -->
+                </div>
+              </div>
+            </article>
+          </div>
+
+        </div>
+
+        <!-- Bottom Back to Top / New Problem Action -->
+        <div class="bottom-action-bar">
+          <button type="button" id="bottomNewProblemBtn" class="btn btn-primary">
+            <span>✏️ Submit Another Problem Statement</span>
+          </button>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="container footer-content">
+      <div class="footer-left">
+        <span class="footer-brand">Hackathon AI Mentor</span>
+        <span class="footer-sep">•</span>
+        <span>Built for student hackathon developers</span>
+      </div>
+      <div class="footer-right">
+        <span>Standard POST <code>/api/mentor</code> integration</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
