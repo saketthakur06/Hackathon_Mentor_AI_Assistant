@@ -1,0 +1,10 @@
+{
+  "name": "hackathon-mentor-ai-assistant",
+  "version": "1.0.0",
+  "description": "Hackathon AI Mentor - MVP planning assistant",
+  "type": "commonjs",
+  "main": "modules/planner.js",
+  "scripts": {
+    "test": "node tests/test-planner.js"
+  }
+}
